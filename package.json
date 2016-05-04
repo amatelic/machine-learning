@@ -1,0 +1,12 @@
+{
+  "name": "ma",
+  "version": "0.0.1",
+  "description": "Site for ma and ai algorithems",
+  "main": "main.js",
+  "scripts": {
+    "sass": "sass --watch ./sass:public",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anže Matelič <amatelic93@gmail.com>",
+  "license": "ISC"
+}

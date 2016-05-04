@@ -1,0 +1,4 @@
+https://spin.atomicobject.com/2015/05/26/mean-shift-clustering/
+https://spin.atomicobject.com/2014/06/24/gradient-descent-linear-regression/
+https://spin.atomicobject.com/2014/08/11/fisher-yates-shuffle-randomization-algorithm/
+https://spin.atomicobject.com/2013/02/23/ports-adapters-software-architecture/
