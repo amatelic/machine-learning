@@ -4,10 +4,17 @@
   "description": "Site for ma and ai algorithems",
   "main": "main.js",
   "scripts": {
-    "server": "json-server ./data.json & live-server",
+    "server": "json-server ./data.json & live-server & gulp sass:watch & nodemon --harmony_object_values_entries ./server/index.js",
     "sass": "sass --watch ./sass:public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Anže Matelič <amatelic93@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.4"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sass": "^2.3.1"
+  }
 }

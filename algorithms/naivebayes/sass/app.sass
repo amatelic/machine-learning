@@ -1,0 +1,117 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans)
+@import default/mixin
+@import default/colors
+@import default/component
+
+
+html, body
+  width: 100%
+  height: 100%
+  display: flex
+  flex-direction: column
+  +resetDefault()
+  position: relative
+
+h1, h2, h3, h4, h5, h6, p, a
+  font-family: $font-family
+
+textarea,input
+  &:focus
+    outline: none
+
+button
+  margin: 0
+  padding: 0
+  border: none
+
+.header
+  background: $primary
+  display: flex
+  height: 70px
+  position: relative
+  z-index: 10
+  font-family: $font-family
+  box-shadow: 1px 1px 1px 2px gray
+  justify-content: space-between
+  +e(logo)
+    width: 15%
+    display: flex
+    color: $text
+    align-items: center
+    justify-content: center
+  +e(searche)
+    display: flex
+    align-items: center
+    justify-content: center
+    width: 65%
+    input
+      height: 35px
+      width: 60%
+      +resetDefault()
+      border: none
+    button
+      border: none
+      background: $accent
+      color: $text
+      +resetDefault()
+      height: 35px
+      font-weight: bold
+      width: 7%
+      &:active
+        background: $dark
+  +e(user)
+    width: 10%
+    height: 100%
+    display: flex
+    justify-content: center
+    align-items: center
+    img
+      max-width: 60px
+      min-width: 50px
+      width: 80%
+      height: 80%
+      border: 4px solid $dark
+      border-radius: 70%
+main
+  width: 100%
+.content
+  display: flex
+  height: 80%
+  position: relative
+//navigation
+.navigation
+  width: 15%
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  background: $light
+  position: relat
+  +e(list)
+    padding: 0
+    list-style-type: none
+    a
+      color: $text
+      text-decoration: none
+  +e(button)
+    margin-top: 10px
+    padding: 10px
+    background: $accent
+    color: white
+    font-size: 0.6em
+    font-weight: bold
+.mails
+  width: 100%
+  background: $text
+  +e(filter)
+    height: 50px
+    display: flex
+    align-items: center
+    justify-content: space-around
+    border-bottom: 2px solid $secondary-text
+
+  +e(mail)
+    display: flex
+    align-items: center
+    justify-content: space-around
+    border-bottom: 2px solid $secondary-text
