@@ -40,7 +40,7 @@ var MailsView = BasicView.extend({
   },
 
   addEmail(model) {
-    this.$el.find('.mails__all').append(`
+    this.$el.find('.mails__all').prepend(`
         <div class="mails__mail">
           <p>${model.get('title')}</p>
           <p>${this.addCategory(model.get('category'))}</p>
@@ -74,6 +74,20 @@ var newMailView = BasicView.extend({
     this.render();
   },
 
+  events: {
+    'click span.new__mail__close': 'toggle',
+    'click .mail__button': 'submit',
+  },
+
+  submit(e) {
+    Array.from(this.$el.find('input, textarea')).forEach(d => {
+      if (d.value !== '') {
+        this.model.set(d.dataset.validate, d.value);
+      }
+    });
+    this.model.save();
+  },
+
   toggle() {
     this.$el.toggleClass('new__mail--hidden');
   },
@@ -81,13 +95,13 @@ var newMailView = BasicView.extend({
   template() {
     return `
       <div class="new__mail__header">
-        <div class="new__mail__banner">New message:</div>
-        <div class="mail__input"><span>For:</span><input placeholder="email" type="type"></div>
-        <div class="mail__input"><span>Purpos:</span><input placeholder="title" type="type"></div>
+        <div class="new__mail__banner">New message:<span class="new__mail__close">X</span></div>
+        <div class="mail__input"><span>For:</span><input data-validate="title" placeholder="email" type="type"></div>
+        <div class="mail__input"><span>Purpos:</span><input data-validate="email" placeholder="title" type="type"></div>
 
       </div>
       <div class="new__mail__body">
-        <textarea name="name" rows="8" cols="40" placeholder="Message"></textarea>
+        <textarea data-validate="content"  rows="8" cols="40" placeholder="Message"></textarea>
         <button class="mail__button" type="button" name="button">Send</button>
       </div>`;
   },

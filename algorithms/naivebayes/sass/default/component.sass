@@ -24,20 +24,21 @@
   padding: 5px
   box-shadow: 1px 1px 1px 1px gray
   transition: 0.5s transform ease
-  +m(hidden)
-    transform: translateY(270px)
+  +e(close)
+    float: right
   +e(body)
     textarea
       padding: 10px 0 0 0
       margin: 0
       width: 100%
       border: none
-
   +e(banner)
     background: $primary
     color: white
     font-family: $font-family
     padding: 5px
+  +m(hidden)
+    transform: translateY(270px)
 .mail__input
   font-family: $font-family
   border-bottom: 2px solid gray

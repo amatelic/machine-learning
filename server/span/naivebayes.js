@@ -3,7 +3,7 @@
 function getWords(doc) {
   return doc.split(/\s+/)
     .filter(w => w.length > 2 && w.length < 20)
-    .map(w => w.toLowerCase().replace(/[.!?]/, ''));
+    .map(w => w.toLowerCase().replace(/[.!?,\\\/\'\"]/, ''));
 }
 
 class Classifier {

@@ -12,7 +12,6 @@ function mailAdapter(res) {
     return object;
   }, {});
   this.navigate('mails', {trigger: true});
-
 }
 
 var Route = Backbone.Router.extend({
@@ -23,7 +22,7 @@ var Route = Backbone.Router.extend({
     this.region.onShow('navigation', new NavigationView());
     this.region.onShow('mails', new MailsView({collection: new Mails()}));
     this.navigate('mails', {trigger: true});
-    var newMail =  new newMailView({el: '.new__mail'});
+    var newMail =  new newMailView({el: '.new__mail', model: new newEmail()});
     Backbone.Events.on('create:mail', (d) => {
       console.log(newMail.toggle());
     });
@@ -32,10 +31,6 @@ var Route = Backbone.Router.extend({
   routes: {
     mails: 'mails',
   },
-
-  // execute(callback, args, name) {
-  //   console.log(callback, args, name);
-  // },
 
   mails() {
     $.get('http://localhost:3000/mails', (res) => {

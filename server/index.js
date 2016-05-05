@@ -1,26 +1,57 @@
 var express = require('express');
 var classifier = require('./span/naivebayes');
+var bodyParser = require('body-parser');
+var db = require('./span/db');
 var app = express();
 var NaiveBayes = new classifier.NaiveBayes(classifier.getWords);
-function sampletrain(cl) {
-  cl.train('Buy some free drugs its good.', 'bad');
-  cl.train('Have sex with loot of girls.', 'bad');
-  cl.train('Get viagra for better sex.', 'bad');
-  cl.train('Hi time should we go playings', 'good');
-  cl.train('Hi you are a good friend', 'good');
-  cl.train('Skavti danes ob 10 uri dobimo se pred skavtsko', 'skavts');
-  // cl.train('Skavti danes ob 10 uri dobimo se pred skavtsko', 'skavts');
-  // cl.train('Skavti danes ob 10 uri dobimo se pred skavtsko', 'skavts');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
+Object.keys(db).forEach(d => {
+  Object.keys(db[d]).forEach(text => {
+    NaiveBayes.train(db[d][text], d);
+  });
+});
+
+function check(title, content) {
+  var category = ['new'];
+  var state = NaiveBayes.classify(content);
+  if (state === 'bad') {
+    category.push('span');
+    NaiveBayes.train(content, 'bad');
+  } else {
+    NaiveBayes.train(content, 'true');
+  }
+
+  return {
+    title,
+    content,
+    category,
+    date: new Date(),
+  };
 }
 
-sampletrain(NaiveBayes);
-console.log(NaiveBayes.classify('you are a good friend'));
-console.log(NaiveBayes.classify('playing sex game'));
-console.log(NaiveBayes.classify('good friend'));
-console.log(NaiveBayes.classify('have some good viagra with some good drugs'));
-
+var mails = [];
+console.log(NaiveBayes);
 app.get('/', function(req, res) {
-  res.json({a: 1});
+  res.json({conten: 'Site is on development'});
+});
+
+app.get('/new', function(req, res) {
+  res.json(mails);
+  mails = [];
+});
+
+app.post('/new_mail', function(req, res) {
+  let {title, content} = req.body;
+  mails.push(check(title, content));
+  res.json({status: 200});
 });
 
 app.listen(5000);
