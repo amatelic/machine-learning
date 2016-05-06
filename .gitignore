@@ -2,3 +2,4 @@
 public
 node_modules
 algorithms/naivebayes/lib
+algorithms/decisonTrees/lib

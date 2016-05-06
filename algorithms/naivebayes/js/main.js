@@ -21,7 +21,7 @@ var Route = Backbone.Router.extend({
     this.region.onShow('header', new SearcheView());
     this.region.onShow('navigation', new NavigationView());
     this.region.onShow('mails', new MailsView({collection: new Mails()}));
-    this.navigate('mails', {trigger: true});
+    this.navigate('/mails', {trigger: true});
     var newMail =  new newMailView({el: '.new__mail', model: new newEmail()});
     Backbone.Events.on('create:mail', (d) => {
       console.log(newMail.toggle());
@@ -42,6 +42,6 @@ var Route = Backbone.Router.extend({
   },
 });
 
-var route = new Route({region});
 
 Backbone.history.start();
+var route = new Route({region});

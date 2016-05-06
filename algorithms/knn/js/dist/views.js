@@ -25,6 +25,7 @@ var Table = Base.extend({
     this.body = this.$el.find('tbody');
   },
 });
+
 var Tables = Base.extend({
   el: '.table-data',
   children: {},
