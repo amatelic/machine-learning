@@ -1,10 +1,11 @@
 class DecisonTreeGraph {
   constructor(el, tree) {
     this.canvas = document.querySelector(el);
+    this.padding = 50;
     this.ctx = this.canvas.getContext('2d');
-    this.height = this.canvas.clientHeight - 20;
-    this.width = this.canvas.clientWidth - 20;
-    this.ctx.clearRect(0, 0, this.width, this.height);
+    this.height = this.canvas.clientHeight - 100;
+    this.width = this.canvas.clientWidth - 100;
+    this.ctx.clearRect(0, 0, this.canvas.clientHeight, this.canvas.clientWidth);
     this.tree = tree;
     this.d = this.countDepth(this.tree);
   }
@@ -35,12 +36,16 @@ class DecisonTreeGraph {
   }
 
   setConditions(tree) {
-    var text = (!isNaN(parseFloat(tree.value))) ? 'value > ' + tree.value : 'value == ' + tree.value;
+    var text = (!isNaN(parseFloat(tree.value))) ? 'value > ' + tree.value : 'value==' + tree.value;
     return text;
   }
 
   show() {
-    this.drawTree(this.tree, this.width / 2, this.height / 7, this.width / 2);
+    this.drawTree(this.tree, this.width / 2, this.height / this.d, this.width / 2);
+  }
+
+  getWidth(width) {
+    return this.padding + width;
   }
 
   drawTree(tree, width, height, oldWidth) {
@@ -50,24 +55,24 @@ class DecisonTreeGraph {
     }
 
     if (tree.value) {
-      this.ctx.fillText(this.setConditions(tree), width - 10, height - 20);
-      this.ctx.fillText('T', width + 30, height);
-      this.ctx.fillText('F', width - 30, height);
+      this.ctx.fillText(this.setConditions(tree), this.getWidth(width - 10), height - 20);
+      this.ctx.fillText('T', this.getWidth(width + 30), height);
+      this.ctx.fillText('F', this.getWidth(width - 30), height);
     }
 
     if (tree.results) {
-      this.ctx.fillText(JSON.stringify(tree.results), width - 20, height + 20);
+      this.ctx.fillText(JSON.stringify(tree.results), this.getWidth(width - 20), height + 20);
     }
 
-    this.line(width, height, oldWidth, height / hp);
-    this.arc(width, height);
+    this.line(this.getWidth(width), height, this.getWidth(oldWidth), height / hp);
+    this.arc(this.padding + width, height);
 
     if (width > (this.width / 2)) {
-      this.drawTree(tree.tb, width + (width / 10), height * hp, width);
-      this.drawTree(tree.fb, width - (width / 10), height * hp, width);
+      this.drawTree(tree.tb, width + (width / 6), height * hp, width);
+      this.drawTree(tree.fb, width - (width / 6), height * hp, width);
     } else {
-      this.drawTree(tree.tb, width + (width / 3), height * hp, width);
-      this.drawTree(tree.fb, width - (width / 3), height * hp, width);
+      this.drawTree(tree.tb, width + (width / 2), height * hp, width);
+      this.drawTree(tree.fb, width - (width / 2), height * hp, width);
     }
   }
 }

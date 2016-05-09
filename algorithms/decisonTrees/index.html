@@ -10,10 +10,16 @@
   <script src="./lib/underscore/underscore-min.js"></script>
   <script src="./lib/backbone/backbone-min.js"></script>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <style>
+    .table-input{
+      padding: 0;
+    }
+  </style>
 </head>
 <body>
   <div class="col-md-12 ">
-    <div class="col-md-2">
+    <div class="page-header">
+      <h1>Decison tree example:</h1>
       <p>Select csv file</p>
       <input id="file" type="file" name="name" >
     </div>
@@ -25,60 +31,38 @@
   </div>
 
   <script src="./decisonTree.js"></script>
+  <script src="view.js"></script>
   <script src="./drawTree.js"></script>
   <script type="text/javascript">
-    var Table = Backbone.View.extend({
-      tagName: 'table',
-      className: 'table table-striped',
-      render() {
-        this.$el.html(`
-          <thead>
-            <tr><td style="text-align: center;" colspan="2">Decison tree-data<td></tr>
-            <tr>
-              ${this.createHeader(this.model)}
-            </tr>
-          <thead>
-          <tbody>
-            ${this.createTable(this.model)}
-          </tbody>`);
-        return this;
-      },
-
-      createHeader(collection) {
-        return collection[0].reduce((str, n) => str+= '<td>' + n + '</td>', '');
-      },
-
-      createTable(col) {
-        col = col.slice(1);
-        var data = ('<tr><td>' + col.map((row) => row.join('</td><td>')).join('</tr><tr><td>') + '</td></tr>');
-        return data;
-      },
-
-    });
 
     var file = document.querySelector('#file')
     var table = $('.dc-table');
     file.addEventListener('change', handleFileSelect, false);
+
+
     function handleFileSelect(evt) {
       var files = evt.target.files;
-      if (files.length === 0) {
-        return;
-      }
+      if (files.length === 0) return;
       var file = files[0];
       var reader = new FileReader();
       reader.onloadend = function(evt) {
         if (evt.target.readyState == FileReader.DONE) { // DONE == 2
-          var data = evt.target.result.split('\n').slice(0, -1).map(f => f.split(','));
+          var data = evt.target.result.split('\n')
+                        .slice(0, -1)
+                        .map(f => f.split(','));
+
           var tree = buildTree(data.slice(1), entropy);
           var dcgraph = new DecisonTreeGraph('#canvas', tree);
+          table.html((new Table({model: data, event: Backbone.Events})).render().el)
           dcgraph.show();
-          table.html((new Table({model: data})).render().el)
-          console.log(classify(['Sunny', 'Cool', null, null], tree ))
-          console.log(mdclassify(['Sunny', 'Mill', null, null], tree))
+
+          Backbone.Events.on('classsify', values => {
+            let result = classify(values, tree);
+            Backbone.Events.trigger('classsify:response', result);
+          });
         }
       }
       var blob = file.slice();
-      console.log('reader: ', reader);
       reader.readAsBinaryString(blob);
     }
   </script>

@@ -38,7 +38,6 @@ function check(title, content) {
 }
 
 var mails = [];
-console.log(NaiveBayes);
 app.get('/', function(req, res) {
   res.json({conten: 'Site is on development'});
 });

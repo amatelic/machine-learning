@@ -11,9 +11,6 @@ class Canvas {
     this.yScale = this.normalize(yMax, yMin);
   }
 
-  normalize(max, min) {
-    return (value) => (value - min) / (max - min);
-  }
 
   reset() {
     this.ctx.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);

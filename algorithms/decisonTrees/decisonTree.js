@@ -117,13 +117,17 @@ function buildTree(rows, scoref) {
     let falseBranch = buildTree(bestSets[1], scoref);
     return new DecisonTree({
       col: bestCriteria[0],
-      value: bestCriteria[1],
+      value: isNumber(bestCriteria[1]) ? parseInt(bestCriteria[1]) : bestCriteria[1],
       tb: trueBranch,
       fb: falseBranch,
     });
   }else {
     return new DecisonTree({results:uniquecounts(rows)});
   }
+}
+
+function isNumber(v) {
+  return !isNaN(parseFloat(v));
 }
 
 function classify(observation, tree) {

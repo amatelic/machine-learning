@@ -40,7 +40,6 @@ class Kmeans {
 
   classify() {
     let {pow, sqrt} = Math;
-    let nm = (v, max, min) => (v - 1) / (10 - 1);
     var mm = {};
     for (var data of this.collection) {
       let max = 0;
