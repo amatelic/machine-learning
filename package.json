@@ -6,6 +6,7 @@
   "scripts": {
     "server": "json-server ./data.json & live-server & gulp sass:watch & nodemon --harmony_object_values_entries ./server/index.js",
     "sass": "sass --watch ./sass:public",
+    "sass-alg": "gulp sass:watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Anže Matelič <amatelic93@gmail.com>",

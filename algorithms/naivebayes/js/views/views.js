@@ -35,13 +35,21 @@ var NavigationView = BasicView.extend({
 
 var MailsView = BasicView.extend({
   className: 'mails',
-  initialize() {
+  initialize(opt) {
+    this.appEvent = opt.appEvent;
     this.listenTo(this.collection, 'add', this.addEmail.bind(this));
+  },
+
+  events: {
+    'click .mails__mail': 'showMail',
+  },
+  display() {
+    this.collection.each(this.addEmail, this);
   },
 
   addEmail(model) {
     this.$el.find('.mails__all').prepend(`
-        <div class="mails__mail">
+        <div data-id="${model.get('id')}" class="mails__mail">
           <p>${model.get('title')}</p>
           <p>${this.addCategory(model.get('category'))}</p>
           <p>${model.get('content').substr(0, 20)}...</p>
@@ -55,6 +63,12 @@ var MailsView = BasicView.extend({
       str += `<span class="label label--${next}">${next}</span>`;
       return str;
     }, ``);
+  },
+
+  showMail(e) {
+    var el = $(e.target);
+    let id = (el.hasClass('mails__mail')) ? el.data('id') : el.closest('.mails__mail').data('id');
+    this.appEvent.trigger(`show:mail`, {id: id});
   },
 
   template() {
@@ -104,5 +118,22 @@ var newMailView = BasicView.extend({
         <textarea data-validate="content"  rows="8" cols="40" placeholder="Message"></textarea>
         <button class="mail__button" type="button" name="button">Send</button>
       </div>`;
+  },
+});
+
+var MailShow = BasicView.extend({
+  classNames: 'display__email',
+  template() {
+    return `
+      <div class="display__email__header">
+        <h2>${this.model.get('title')}</h2>
+        <hr>
+        <p>Tags: ${this.model.get('category').join(',')}</p>
+      </div>
+      <div class="display__email__body">
+        <p>${this.model.get('content')}</p>
+        <p>Writen: <time>${this.model.get('date').fromNow()}</time></p>
+      </div>
+    `;
   },
 });

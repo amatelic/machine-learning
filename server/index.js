@@ -2,9 +2,10 @@ var express = require('express');
 var classifier = require('./span/naivebayes');
 var bodyParser = require('body-parser');
 var db = require('./span/db');
+var user_mails = require('./span/mails');
 var app = express();
 var NaiveBayes = new classifier.NaiveBayes(classifier.getWords);
-
+var count = 4;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function(req, res, next) {
@@ -19,7 +20,7 @@ Object.keys(db).forEach(d => {
   });
 });
 
-function check(title, content) {
+function check(title, content, count) {
   var category = ['new'];
   var state = NaiveBayes.classify(content);
   if (state === 'bad') {
@@ -30,6 +31,7 @@ function check(title, content) {
   }
 
   return {
+    id: count,
     title,
     content,
     category,
@@ -43,13 +45,20 @@ app.get('/', function(req, res) {
 });
 
 app.get('/new', function(req, res) {
-  res.json(mails);
+  res.json({mails:mails});
   mails = [];
+});
+
+app.get('/mails', function(req, res) {
+  res.json({
+    page: 1,
+    mails: user_mails.mails,
+  });
 });
 
 app.post('/new_mail', function(req, res) {
   let {title, content} = req.body;
-  mails.push(check(title, content));
+  mails.push(check(title, content, count++));
   res.json({status: 200});
 });
 

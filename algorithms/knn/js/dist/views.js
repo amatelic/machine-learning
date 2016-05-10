@@ -60,7 +60,9 @@ var Tables = Base.extend({
 
   render() {
     this.$el.html(`
-      <h2>KNN algorithem:</h2>
+      <div class="page-header">
+        <h1>KNN algorithem:</h1>
+      </div>
       <div class="form-groupc col-md-3">
         <label for="exampleInputPassword1">Add new value</label>
         <input type="text" value=10 class="form-control" id="rooms" placeholder="Rooms">
