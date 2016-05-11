@@ -23,10 +23,10 @@
       <p>Select csv file</p>
       <input id="file" type="file" name="name" >
     </div>
-    <div class="col-md-5 dc-table">
+    <div class="col-md-12 dc-table">
     </div>
-    <div class="col-md-5">
-      <canvas id="canvas" width="700" height="700"></canvas>
+    <div class="col-md-12">
+      <canvas style="visibility:hidden" id="canvas" width="1500" height="700"></canvas>
     </div>
   </div>
 
@@ -55,6 +55,8 @@
           var dcgraph = new DecisonTreeGraph('#canvas', tree);
           table.html((new Table({model: data, event: Backbone.Events})).render().el)
           dcgraph.show();
+          var image = dcgraph.getImage();
+          window.open(image.src,'Image','width=1000,height=1000,resizable=1');
 
           Backbone.Events.on('classsify', values => {
             let result = classify(values, tree);

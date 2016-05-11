@@ -5,7 +5,7 @@ class DecisonTreeGraph {
     this.ctx = this.canvas.getContext('2d');
     this.height = this.canvas.clientHeight - 100;
     this.width = this.canvas.clientWidth - 100;
-    this.ctx.clearRect(0, 0, this.canvas.clientHeight, this.canvas.clientWidth);
+    this.ctx.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
     this.tree = tree;
     this.d = this.countDepth(this.tree);
   }
@@ -36,20 +36,26 @@ class DecisonTreeGraph {
   }
 
   setConditions(tree) {
-    var text = (!isNaN(parseFloat(tree.value))) ? 'value > ' + tree.value : 'value==' + tree.value;
+    var text = (!isNaN(parseFloat(tree.value))) ? '? > ' + tree.value : '?==' + tree.value;
     return text;
   }
 
   show() {
-    this.drawTree(this.tree, this.width / 2, this.height / this.d, this.width / 2);
+    this.drawTree(this.tree, this.width / 2, 40, this.width / 2, 2);
   }
 
   getWidth(width) {
     return this.padding + width;
   }
 
-  drawTree(tree, width, height, oldWidth) {
-    var hp = 1.3;
+
+  getImage() {
+    var image = new Image();
+    image.src = this.canvas.toDataURL('image/png');
+    return image;
+  }
+
+  drawTree(tree, width, height, oldWidth, ct) {
     if (tree === null) {
       return 0;
     }
@@ -64,15 +70,11 @@ class DecisonTreeGraph {
       this.ctx.fillText(JSON.stringify(tree.results), this.getWidth(width - 20), height + 20);
     }
 
-    this.line(this.getWidth(width), height, this.getWidth(oldWidth), height / hp);
+    var sdvW = (width / (ct + 1)) / ct;
+    var sdvH = this.height / this.d;
+    this.line(this.getWidth(width), height, this.getWidth(oldWidth), height - sdvH);
     this.arc(this.padding + width, height);
-
-    if (width > (this.width / 2)) {
-      this.drawTree(tree.tb, width + (width / 6), height * hp, width);
-      this.drawTree(tree.fb, width - (width / 6), height * hp, width);
-    } else {
-      this.drawTree(tree.tb, width + (width / 2), height * hp, width);
-      this.drawTree(tree.fb, width - (width / 2), height * hp, width);
-    }
+    this.drawTree(tree.tb, (width + sdvW), height + sdvH, width, ct + 1);
+    this.drawTree(tree.fb, (width - sdvW), height + sdvH, width, ct + 1);
   }
 }
