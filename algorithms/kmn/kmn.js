@@ -56,7 +56,7 @@ class Kmeans {
       if (!mm[cluster]) {
         mm[cluster] = [];
       }
-
+      console.log(mm)
       mm[cluster].push(data);
     }
 

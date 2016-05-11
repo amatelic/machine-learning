@@ -21,13 +21,11 @@ var Mails = Backbone.Collection.extend({
 
   parse(res) {
     this.page = res.page;
-    console.log(res)
     return res.mails;
   },
 
   fetchData(url, opt = null) {
     this.urlString = (url) ? url : this.urlString;
-    console.log(this)
     return this.fetch(opt);
   },
 });

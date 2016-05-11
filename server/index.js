@@ -56,6 +56,15 @@ app.get('/mails', function(req, res) {
   });
 });
 
+app.get('/searche', function(req, res) {
+  let q = req.query.q;
+  res.json({results: [
+    'data',
+    'test',
+    'bla',
+  ]});
+});
+
 app.post('/new_mail', function(req, res) {
   let {title, content} = req.body;
   mails.push(check(title, content, count++));

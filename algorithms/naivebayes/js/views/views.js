@@ -1,5 +1,34 @@
 var SearcheView = BasicView.extend({
   className: 'header',
+  events: {
+    'keyup input': 'getData',
+  },
+  initialize() {
+    this.makeSearche = _.debounce(this.makeSearche, 500);
+  },
+
+  getData(e) {
+    this.makeSearche(e);
+  },
+
+  makeSearche(e) {
+    let params = e.target.value;
+    console.log(e)
+    $.get('http://localhost:5000/searche', {q: params}).then(res => {
+      this.$el.find('.query__response').removeClass('hidden');
+      this.$el.find('.query__response > ul').empty();
+      res.results.forEach(this.showSearcheResponse.bind(this));
+    });
+    $('body').one('click', () => this.$el.find('.query__response').addClass('hidden'));
+  },
+
+  showSearcheResponse(d) {
+    this.$el.find('.query__response > ul').append(`<li>${d}</li>`);
+  },
+  remove() {
+
+  },
+
   template() {
     return `
       <div class="header__logo">
@@ -8,6 +37,9 @@ var SearcheView = BasicView.extend({
       <div class="header__searche">
           <input type="text" name="name" value="">
           <button type="button" name="button">s</button>
+          <div class="query__response hidden">
+            <ul></ul>
+          </div>
       </div>
       <div class="header__user">
         <img src="http://rampages.us/alharthiaa/wp-content/uploads/sites/8487/2015/08/5249700000_5247598126_mrbean_rare_collection_xlarge_xlarge.jpeg" alt="" />
@@ -18,7 +50,7 @@ var SearcheView = BasicView.extend({
 var NavigationView = BasicView.extend({
   className: 'navigation',
   events: {
-    'click button': (e) => Backbone.Events.trigger('create:mail') ,
+    'click button': (e) => Backbone.Events.trigger('create:mail'),
   },
 
   template() {
@@ -75,8 +107,9 @@ var MailsView = BasicView.extend({
     return `
     <div class="mails__filter">
       <p>Title</p>
-      <p>Title</p>
-      <p>2 from 100</p>
+      <p>Tags</p>
+      <p>Content</p>
+      <p>Date</p>
     </div>
     <div class="mails__all">
     </div>`;
@@ -128,11 +161,13 @@ var MailShow = BasicView.extend({
       <div class="display__email__header">
         <h2>${this.model.get('title')}</h2>
         <hr>
-        <p>Tags: ${this.model.get('category').join(',')}</p>
+        <p>Tags: <span class="label label--default">${this.model.get('category').join('</span><span class="label label--default">')}</span></p>
       </div>
       <div class="display__email__body">
         <p>${this.model.get('content')}</p>
-        <p>Writen: <time>${this.model.get('date').fromNow()}</time></p>
+        <blockquote class="display__email__time">
+          <time>Was received: ${ this.model.get('date').fromNow() }</time>
+        </blockquote>
       </div>
     `;
   },
