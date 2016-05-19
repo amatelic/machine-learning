@@ -19,6 +19,19 @@ var Mails = Backbone.Collection.extend({
     setInterval(() => this.fetchData('new', {remove: false}), 5000);
   },
 
+  filterBy(query) {
+
+    if (_.isEmpty(query)) {
+      this.trigger('filterby', this.models);
+      return;
+    }
+
+    let filterData = this.filter((model) => {
+      return model.get('category').indexOf(query.substr(1)) !== -1;
+    });
+    this.trigger('filterby', filterData);
+  },
+
   parse(res) {
     this.page = res.page;
     return res.mails;

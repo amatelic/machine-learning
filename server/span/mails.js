@@ -21,7 +21,7 @@ module.exports = {
       "title": "Skavts blb bla",
       "content": "Skavti danes ob 10 uri dobimo se pred skavtsko",
       "category": [
-        "span",
+        "spam",
         "new"
       ],
       "date": new Date(2015, 7, 20)
@@ -31,7 +31,7 @@ module.exports = {
       "title": "Skavts danes ob 20",
       "content": "Skavti danes ob 20.30 uri dobimo se pred skavtsko",
       "category": [
-        "span"
+        "spam"
       ],
       "date": new Date(2015, 10, 3)
     }

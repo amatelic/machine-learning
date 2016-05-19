@@ -13,7 +13,6 @@ var SearcheView = BasicView.extend({
 
   makeSearche(e) {
     let params = e.target.value;
-    console.log(e)
     $.get('http://localhost:5000/searche', {q: params}).then(res => {
       this.$el.find('.query__response').removeClass('hidden');
       this.$el.find('.query__response > ul').empty();
@@ -24,9 +23,6 @@ var SearcheView = BasicView.extend({
 
   showSearcheResponse(d) {
     this.$el.find('.query__response > ul').append(`<li>${d}</li>`);
-  },
-  remove() {
-
   },
 
   template() {
@@ -51,6 +47,11 @@ var NavigationView = BasicView.extend({
   className: 'navigation',
   events: {
     'click button': (e) => Backbone.Events.trigger('create:mail'),
+    'click a': 'spam',
+  },
+  spam(e) {
+    e.preventDefault();
+    Backbone.Events.trigger('show:spam', e.target.hash);
   },
 
   template() {
@@ -58,9 +59,8 @@ var NavigationView = BasicView.extend({
       <button class="navigation__button" type="button" name="button">New</button>
       <ul class="navigation__list">
         <li><a href="#">All</a></li>
-        <li><a href="#">New</a></li>
-        <li><a href="#">Spam</a></li>
-        <li><a href="#">Settings</a></li>
+        <li><a href="#new">New</a></li>
+        <li><a href="#spam">Spam</a></li>
       </ul>`;
   },
 });
@@ -70,6 +70,10 @@ var MailsView = BasicView.extend({
   initialize(opt) {
     this.appEvent = opt.appEvent;
     this.listenTo(this.collection, 'add', this.addEmail.bind(this));
+    this.listenTo(this.collection, 'filterby', function(collection) {
+      this.$el.find('.mails__all').empty();
+      collection.forEach(this.addEmail, this);
+    }.bind(this));
   },
 
   events: {

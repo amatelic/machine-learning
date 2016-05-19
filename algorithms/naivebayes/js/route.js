@@ -37,5 +37,6 @@ class AppView {
       this.region.onShow('mails', new MailShow({model}));
     });
     Backbone.Events.on('show:index', 1);
+    Backbone.Events.on('show:spam', (query) => this.mails.filterBy(query));
   }
 }

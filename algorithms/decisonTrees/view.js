@@ -32,14 +32,14 @@ var Table = Backbone.View.extend({
     this.$el.html(`
       <thead>
         <tr><td style="text-align: center;" colspan="${this.model.length}">Decison tree-data</td></tr>
+        <tr>${this.createInputFields(this.model)}</tr>
+        <tr><td colspan="${this.model.length}"><button class="btn btn-primary">Classify</button></td></tr>
         <tr>
           ${this.createHeader(this.model)}
         </tr>
       <thead>
       <tbody>
         ${this.createTable(this.model)}
-        <tr>${this.createInputFields(this.model)}</tr>
-        <tr><td colspan="${this.model.length}"><button class="btn btn-primary">Classify</button></td></tr>
       </tbody>`);
     return this;
   },
