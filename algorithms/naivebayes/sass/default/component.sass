@@ -1,19 +1,6 @@
 @import colors
 
-.label
-  color: white
-  padding: 5px
-  margin-right: 5px
-  font-size: 0.7em
-  font-weight: bold
-  font-family: $font-family
-  border-radius: 10%
-  +m(new)
-    background: $primary
-  +m(spam)
-    background: $spam
-  +m(default)
-    background: $default
+//Component for mail component
 .new__mail
   display: flex
   height: 250px
@@ -27,6 +14,8 @@
   transition: 0.5s transform ease
   +e(close)
     float: right
+    &:active
+      color: gray
   +e(body)
     textarea
       padding: 10px 0 0 0
@@ -40,6 +29,8 @@
     padding: 5px
   +m(hidden)
     transform: translateY(270px)
+
+
 .mail__input
   font-family: $font-family
   border-bottom: 2px solid gray
@@ -50,7 +41,15 @@
     width: 75%
     padding-left: 5px
 
+
+//Button for new_mail
 .mail__button
   background: $primary
   color: $text
   padding: 5px
+  outline: none
+  border-radius: 32px
+  transition: 0.2s all ease
+  &:focus
+    background: $dark
+    transform: scale(1.1)

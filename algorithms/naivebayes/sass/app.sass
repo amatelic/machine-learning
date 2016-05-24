@@ -1,6 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans)
 @import default/mixin
 @import default/colors
+@import default/states
 @import sites/mail
 @import default/component
 
@@ -122,9 +123,13 @@ aside
     margin-top: 10px
     padding: 10px
     background: $accent
+    outline: none
     color: white
     font-size: 0.6em
     font-weight: bold
+    &:focus
+    &:active
+      box-shadow: inset 0px 0px 10px 5px rgba(128, 128, 128, 0.75)
 .mails
   width: 100%
   background: $text

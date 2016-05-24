@@ -47,9 +47,9 @@ var NavigationView = BasicView.extend({
   className: 'navigation',
   events: {
     'click button': (e) => Backbone.Events.trigger('create:mail'),
-    'click a': 'spam',
+    'click a': 'email',
   },
-  spam(e) {
+  email(e) {
     e.preventDefault();
     Backbone.Events.trigger('show:spam', e.target.hash);
   },
@@ -136,7 +136,11 @@ var newMailView = BasicView.extend({
         this.model.set(d.dataset.validate, d.value);
       }
     });
-    this.model.save();
+    this.model.save({}, {
+      success: function(model, res) {
+        swal(res);
+      },
+    });
   },
 
   toggle() {
@@ -160,12 +164,18 @@ var newMailView = BasicView.extend({
 
 var MailShow = BasicView.extend({
   classNames: 'display__email',
+  showLabels() {
+    return this.model.get('category').map(category => {
+      return `<span class="label label--default">${category}</span>`;
+    });
+  },
+
   template() {
     return `
       <div class="display__email__header">
         <h2>${this.model.get('title')}</h2>
         <hr>
-        <p>Tags: <span class="label label--default">${this.model.get('category').join('</span><span class="label label--default">')}</span></p>
+        <p>Tags: ${this.showLabels()}</p>
       </div>
       <div class="display__email__body">
         <p>${this.model.get('content')}</p>

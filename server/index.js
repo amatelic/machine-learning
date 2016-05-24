@@ -66,9 +66,16 @@ app.get('/searche', function(req, res) {
 });
 
 app.post('/new_mail', function(req, res) {
+  let mailResponse = 'Mail wasn\'t send';
+  let type = 'warning';
   let {title, content} = req.body;
-  mails.push(check(title, content, count++));
-  res.json({status: 200});
+  if (title && content) {
+    mails.push(check(title, content, count++));
+    mailResponse = 'Mail was send';
+    type = 'success';
+  }
+  res.json({title: mailResponse, type: type});
+
 });
 
 app.listen(5000);
