@@ -1,4 +1,16 @@
 var Mail = Backbone.Model.extend({
+  urlRoot: 'http://localhost:5000/new_mail',
+  defaults: {
+    title: '',
+    category: [],
+    content: '',
+    date: new Date(),
+  },
+
+  validate(attr, opt) {
+    console.log(attr, opt);
+  },
+
   parse(data) {
     data.date = moment(data.date);
     return data;
@@ -6,9 +18,10 @@ var Mail = Backbone.Model.extend({
 
 });
 
-var newEmail = Backbone.Model.extend({
-  urlRoot: 'http://localhost:5000/new_mail',
-});
+// //Class
+// var newEmail = Backbone.Model.extend({
+// });
+
 var Mails = Backbone.Collection.extend({
   model: Mail,
   page: 0,

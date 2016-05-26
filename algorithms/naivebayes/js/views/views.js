@@ -121,8 +121,25 @@ var MailsView = BasicView.extend({
 });
 
 var newMailView = BasicView.extend({
+  validData: false,
   initialize() {
     this.render();
+    console.log(this);
+  },
+
+  inputValidation: {
+    email: {
+      validation: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      response: 'Email is not correct',
+    },
+    content: {
+      validation: /[^$|\s+]/,
+      response: 'Content is empty',
+    },
+    title: {
+      validation: /[^$|\s+]/,
+      response: 'Title is empty',
+    },
   },
 
   events: {
@@ -130,17 +147,29 @@ var newMailView = BasicView.extend({
     'click .mail__button': 'submit',
   },
 
+  checkText(e) {
+    let target = e;
+    let type =  target.dataset.validate;
+    if(!this.inputValidation[type].validation.test(target.value)) {
+      alert(this.inputValidation[type].response);
+      this.validData = false;
+    } else {
+      this.validData = true;
+    }
+  },
+
   submit(e) {
-    Array.from(this.$el.find('input, textarea')).forEach(d => {
-      if (d.value !== '') {
-        this.model.set(d.dataset.validate, d.value);
-      }
-    });
-    this.model.save({}, {
-      success: function(model, res) {
-        swal(res);
-      },
-    });
+    var el = Array.from(this.$el.find('input, textarea'));
+    el.forEach(this.checkText.bind(this));
+    if (this.validData) {
+      el.forEach(d => this.model.set(d.dataset.validate, d.value));
+      this.model.save({}, {
+        success: function(model, res) {
+          swal(res);
+        },
+      });
+
+    }
   },
 
   toggle() {
@@ -151,8 +180,8 @@ var newMailView = BasicView.extend({
     return `
       <div class="new__mail__header">
         <div class="new__mail__banner">New message:<span class="new__mail__close">X</span></div>
-        <div class="mail__input"><span>For:</span><input data-validate="title" placeholder="email" type="type"></div>
-        <div class="mail__input"><span>Purpos:</span><input data-validate="email" placeholder="title" type="type"></div>
+        <div class="mail__input"><span>For:</span><input data-validate="email" placeholder="email" type="text"></div>
+        <div class="mail__input"><span>Purpos:</span><input data-validate="title" placeholder="title" type="text"></div>
 
       </div>
       <div class="new__mail__body">

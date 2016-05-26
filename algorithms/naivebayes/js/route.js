@@ -19,7 +19,7 @@ class AppView {
     this.region.onShow('navigation', new NavigationView());
     this.newMail =  new newMailView({
       el: '.new__mail',
-      model: new newEmail(),
+      model: new Mail(),
     });
     this.home();
   }
